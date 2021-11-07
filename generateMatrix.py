@@ -62,11 +62,11 @@ class NewMatrix:
 
         costMatrix = costMatrix.sum(axis=1)
         df['cost'] = costMatrix
-        df = df.sort_values('cost')
 
         return df
 
     def setBestCost(self):
         df = self.getCost().copy()
         df = df.drop(columns=['start'])
+        df = df.sort_values('cost')
         return df.head(10)
