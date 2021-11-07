@@ -7,4 +7,4 @@
 
 ## Enunciado
 
-Format: ![Alt Text](https://potelicky.s3.sa-east-1.amazonaws.com/Trabalho+3.pdf) 
+https://potelicky.s3.sa-east-1.amazonaws.com/Trabalho+3.pdf
