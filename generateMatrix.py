@@ -1,3 +1,8 @@
+'''
+Trabalho 3: Busca Local Caxeiro Viajante
+Grupo: Hélio Potelicki, Luis Felipe Zaguini, Pedro Henrique Roweder
+
+'''
 from random import shuffle, uniform
 import pandas as pd
 
