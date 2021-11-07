@@ -17,6 +17,11 @@ class NewMatrix:
     def getBestCost(self):
         return self.bestCost
 
+    def invertedKey(self, key):
+        left = key.split('-')[0]
+        right = key.split('-')[1]
+        return (f'{right}-{left}')
+
     def setMatrix(self):
         matrix = []
         list = [i for i in range(1, 21)]
@@ -29,20 +34,39 @@ class NewMatrix:
         return matrix
 
     def setCost(self):
-        distances = []
-        for i in range(1, 21):
-            aux = [uniform(0.0, 1.0) for i in range(1, 21)]
-            distances.append(aux)
+        distances = [[None for i in range(0, 20)] for i in range(0, 20)]
+        df = self.getMatrix().copy()
+        df['start'] = pd.DataFrame(df, columns=[0])
+        distanceDictionary = {}
+
+        for y in range(0, 20):
+            for x in range(0, 20):
+                cityStart = df[x][y]
+                if (x == 19):
+                    cityNext = df['start'][y]
+                else:
+                    cityNext = df[x + 1][y]
+
+                key = (f'{cityStart}-{cityNext}')
+
+                if key in distanceDictionary:
+                    distances[y][x] = distanceDictionary[key]
+                else:
+                    value = uniform(0, 1)
+                    distanceDictionary[key] = value
+                    invertedKey = self.invertedKey(key)
+                    distanceDictionary[invertedKey] = value
+                    distances[y][x] = value
 
         costMatrix = pd.DataFrame(distances)
+
         costMatrix = costMatrix.sum(axis=1)
-        df = self.getMatrix()
-        df = df.copy()
-        df['start'] = pd.DataFrame(df, columns=[0])
         df['cost'] = costMatrix
         df = df.sort_values('cost')
 
         return df
 
     def setBestCost(self):
-        return self.getCost().head(10)
+        df = self.getCost().copy()
+        df = df.drop(columns=['start'])
+        return df.head(10)
