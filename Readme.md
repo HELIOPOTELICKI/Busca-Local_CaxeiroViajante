@@ -4,3 +4,7 @@
 
 ### Módulos utilizados: :+1:
 ###    - pip install pandas
+
+## Enunciado
+
+[embed]https://potelicky.s3.sa-east-1.amazonaws.com/Trabalho+3.pdf[/embed]
