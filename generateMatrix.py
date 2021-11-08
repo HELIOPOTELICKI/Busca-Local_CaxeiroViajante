@@ -41,7 +41,8 @@ class NewMatrix:
         return matrix
 
     def setCost(self):
-        distances = [[None for i in range(0, 20)] for i in range(0, 20)]
+        noneList = [None for i in range(0, 20)]
+        distances = [noneList.copy() for i in range(0, 20)]
         df = self.getMatrix().copy()
         df['start'] = pd.DataFrame(df, columns=[0])
         distanceDictionary = {}
