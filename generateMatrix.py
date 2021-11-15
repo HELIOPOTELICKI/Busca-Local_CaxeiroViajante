@@ -11,6 +11,7 @@ import pandas as pd
 
 class NewMatrix:
     def __init__(self):
+        self.distanceDictionary = {}
         self.matrix = pd.DataFrame(self.setMatrix())
         self.populationCost = pd.DataFrame(self.setCost())
         self.bestCost = self.setBestCost()
@@ -23,6 +24,15 @@ class NewMatrix:
 
     def getBestCost(self):
         return self.bestCost
+
+    def getDistanceDictionary(self):
+        return self.distanceDictionary
+
+    def getDistanceByKey(self, key):
+        return self.distanceDictionary[key]
+
+    def setDistanceDictionary(self, key, value):
+        self.distanceDictionary[key] = value
 
     def invertedKey(self, key):
         left = key.split('-')[0]
@@ -45,7 +55,6 @@ class NewMatrix:
         distances = [noneList.copy() for i in range(0, 20)]
         df = self.getMatrix().copy()
         df['start'] = pd.DataFrame(df, columns=[0])
-        distanceDictionary = {}
 
         for y in range(0, 20):
             for x in range(0, 20):
@@ -57,13 +66,13 @@ class NewMatrix:
 
                 key = (f'{cityStart}-{cityNext}')
 
-                if key in distanceDictionary:
-                    distances[y][x] = distanceDictionary[key]
+                if key in self.getDistanceDictionary():
+                    distances[y][x] = self.getDistanceByKey(key)
                 else:
                     value = uniform(0, 1)
-                    distanceDictionary[key] = value
+                    self.setDistanceDictionary(key, value)
                     invertedKey = self.invertedKey(key)
-                    distanceDictionary[invertedKey] = value
+                    self.setDistanceDictionary(invertedKey, value)
                     distances[y][x] = value
 
         costMatrix = pd.DataFrame(distances)
