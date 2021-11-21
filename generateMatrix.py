@@ -5,7 +5,7 @@ Módulos utilizados:
     - pip install pandas
 
 '''
-from random import shuffle, uniform
+from random import shuffle, uniform, random
 import pandas as pd
 
 
@@ -89,3 +89,19 @@ class NewMatrix:
         df = df.drop(columns=['start'])
         df = df.sort_values('cost')
         return df.head(10)
+
+    def dadSelector(self, df_BestCost):
+        addedCosts = df_BestCost['cost'].sum(axis=0)
+        cols = df_BestCost.index
+        sortedVal = random() * addedCosts
+        sumVals = 0
+        i = 0
+
+        while i < len(df_BestCost) and sumVals < sortedVal:
+            sumVals += df_BestCost['cost'][cols[i]]
+            i += 1
+
+        if (i == len(df_BestCost)):
+            return cols[i - 1]
+
+        return cols[i]
