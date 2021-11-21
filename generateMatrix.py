@@ -50,6 +50,16 @@ class NewMatrix:
 
         return matrix
 
+    def generateDistance(self, key):
+        if key in self.getDistanceDictionary():
+            return self.getDistanceByKey(key)
+        else:
+            value = uniform(0, 1)
+            self.setDistanceDictionary(key, value)
+            invertedKey = self.invertedKey(key)
+            self.setDistanceDictionary(invertedKey, value)
+            return value
+
     def setCost(self):
         noneList = [None for i in range(0, 20)]
         distances = [noneList.copy() for i in range(0, 20)]
@@ -65,15 +75,7 @@ class NewMatrix:
                     cityNext = df[x + 1][y]
 
                 key = (f'{cityStart}-{cityNext}')
-
-                if key in self.getDistanceDictionary():
-                    distances[y][x] = self.getDistanceByKey(key)
-                else:
-                    value = uniform(0, 1)
-                    self.setDistanceDictionary(key, value)
-                    invertedKey = self.invertedKey(key)
-                    self.setDistanceDictionary(invertedKey, value)
-                    distances[y][x] = value
+                distances[y][x] = self.generateDistance(key)
 
         costMatrix = pd.DataFrame(distances)
 
