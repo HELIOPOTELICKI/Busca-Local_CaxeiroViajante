@@ -13,7 +13,8 @@ class NewMatrix:
     def __init__(self):
         self.distanceDictionary = {}
         self.matrix = pd.DataFrame(self.setMatrix())
-        self.populationCost = pd.DataFrame(self.setCost())
+        self.populationCost = pd.DataFrame(
+            self.setCost(self.getMatrix().copy()))
         self.bestCost = self.setBestCost()
 
     def getMatrix(self):
@@ -60,10 +61,10 @@ class NewMatrix:
             self.setDistanceDictionary(invertedKey, value)
             return value
 
-    def setCost(self):
+    def setCost(self, data):
         noneList = [None for i in range(0, 20)]
         distances = [noneList.copy() for i in range(0, 20)]
-        df = self.getMatrix().copy()
+        df = data
         df['start'] = pd.DataFrame(df, columns=[0])
 
         for y in range(0, 20):
@@ -121,4 +122,49 @@ class NewMatrix:
         concat = pd.concat([dad, mom], axis=1)
         dads = pd.DataFrame(concat).transpose()
 
+        return dads
+
+    def changeValues(self, dads, column):
+        index = list(dads.index)
+        valueDad = dads[column][index[0]]
+        valueMom = dads[column][index[1]]
+
+        #if (valueDad == valueMom):
+        #   self.changeValues(dads, int(uniform(0, 19)))
+
+        dads[column][index[0]] = valueMom
+        dads[column][index[1]] = valueDad
+
+        return dads, valueDad
+
+    def duplicated(self, dads, valueDads, randomColumn):
+        row = []
+
+        for i in range(0, 20):
+            if (dads[i][1] == valueDads):
+                row.append(i)
+
+        if (randomColumn in row):
+            row.remove(randomColumn)
+
+        if (len(row) == 0):
+            return -1
+
+        return row[0]
+
+    def crossover(self, dads):
+        randomColumn = int(uniform(0, 19))
+
+        dads, valueDads = self.changeValues(dads, randomColumn)
+
+        while (True):
+            row = self.duplicated(dads, valueDads, randomColumn)
+
+            if (row > -1):
+                dads, valueDads = self.changeValues(dads, row)
+                randomColumn = row
+            else:
+                break
+
+        dads = dads.drop(columns=['cost'])
         return dads
