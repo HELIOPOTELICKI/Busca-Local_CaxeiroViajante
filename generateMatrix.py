@@ -12,22 +12,21 @@ import pandas as pd
 class NewMatrix:
     def __init__(self):
         self.distanceDictionary = {}
-        self.matrix = pd.DataFrame(self.setMatrix())
-        self.populationCost = pd.DataFrame(
-            self.setCost(self.getMatrix().copy()))
+        self.matrix = self.setMatrix(None)
+        self.populationCost = pd.DataFrame(self.setCost())
         self.bestCost = self.setBestCost()
 
     def getMatrix(self):
-        return self.matrix
+        return self.matrix.copy()
 
     def getCost(self):
-        return self.populationCost
+        return self.populationCost.copy()
 
     def getBestCost(self):
-        return self.bestCost
+        return self.bestCost.copy()
 
     def getDistanceDictionary(self):
-        return self.distanceDictionary
+        return self.distanceDictionary.copy()
 
     def getDistanceByKey(self, key):
         return self.distanceDictionary[key]
@@ -40,16 +39,19 @@ class NewMatrix:
         right = key.split('-')[1]
         return (f'{right}-{left}')
 
-    def setMatrix(self):
-        matrix = []
-        list = [i for i in range(1, 21)]
+    def setMatrix(self, data):
+        if (data is None):
+            matrix = []
+            list = [i for i in range(1, 21)]
 
-        for number in list:
-            shuffledList = list.copy()
-            shuffle(shuffledList)
-            matrix.append(shuffledList)
+            for number in list:
+                shuffledList = list.copy()
+                shuffle(shuffledList)
+                matrix.append(shuffledList)
 
-        return matrix
+            return pd.DataFrame(matrix)
+        else:
+            self.matrix = data
 
     def generateDistance(self, key):
         if key in self.getDistanceDictionary():
@@ -61,10 +63,10 @@ class NewMatrix:
             self.setDistanceDictionary(invertedKey, value)
             return value
 
-    def setCost(self, data):
+    def setCost(self):
         noneList = [None for i in range(0, 20)]
         distances = [noneList.copy() for i in range(0, 20)]
-        df = data
+        df = self.getMatrix()
         df['start'] = pd.DataFrame(df, columns=[0])
 
         for y in range(0, 20):
@@ -86,7 +88,7 @@ class NewMatrix:
         return df
 
     def setBestCost(self):
-        df = self.getCost().copy()
+        df = self.getCost()
         df = df.drop(columns=['start'])
         df = df.sort_values('cost')
         return df.head(10)
@@ -141,8 +143,11 @@ class NewMatrix:
         row = []
 
         for i in range(0, 20):
-            if (dads[i][1] == valueDads):
-                row.append(i)
+            try:
+                if (dads[i][1] == valueDads):
+                    row.append(i)
+            except (ValueError):
+                pass
 
         if (randomColumn in row):
             row.remove(randomColumn)
@@ -166,5 +171,5 @@ class NewMatrix:
             else:
                 break
 
-        dads = dads.drop(columns=['cost'])
-        return dads
+        sons = dads.drop(columns=['cost'])
+        return sons
