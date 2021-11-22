@@ -7,13 +7,12 @@ Módulos utilizados:
 '''
 from generateMatrix import NewMatrix
 
-m = NewMatrix()
-df = m.getMatrix()
-df2 = m.getCost()
-df3 = m.getBestCost()
-#print(df, end='\n\n')
-#print(df2, end='\n\n')
-#print(df3, end='\n\n')
-#print(m.dadSelector(df3))
+maxIterations = 10000
 
-print(m.dadsNewGen(m.dadSelector(df3), m.dadSelector(df3)))
+
+def main():
+    m = NewMatrix()
+
+
+if __name__ == '__main__':
+    main()
