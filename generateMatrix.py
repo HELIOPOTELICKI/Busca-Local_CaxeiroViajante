@@ -18,6 +18,7 @@ class NewMatrix:
         self.bestValue = self.getBestCost().min()
         self.bestSolution = self.getBestCost().head(1)
 
+    # gets e sets
     def getMatrix(self):
         return self.matrix.copy()
 
@@ -36,11 +37,14 @@ class NewMatrix:
     def setDistanceDictionary(self, key, value):
         self.distanceDictionary[key] = value
 
+    # Inverte a chave(cidadeInicial-cidadeObjetivo),
+    # para que a ida e volta tenham a mesma distancia
     def invertedKey(self, key):
         left = key.split('-')[0]
         right = key.split('-')[1]
         return (f'{right}-{left}')
 
+    # Gera a matriz 20x20
     def setMatrix(self, data):
         if (data is None):
             matrix = []
@@ -55,6 +59,8 @@ class NewMatrix:
         else:
             self.matrix = data
 
+    # Verifica se a chave passada ja existe,
+    # caso não exista, cria uma nova
     def generateDistance(self, key):
         if key in self.getDistanceDictionary():
             return self.getDistanceByKey(key)
@@ -65,6 +71,8 @@ class NewMatrix:
             self.setDistanceDictionary(invertedKey, value)
             return value
 
+    # Copia a primeira coluna do DataFrame na ultima,
+    # Calcula as distâncias, e as soma na coluna "Cost"
     def setCost(self):
         noneList = [None for i in range(0, 20)]
         distances = [noneList.copy() for i in range(0, 20)]
@@ -89,6 +97,7 @@ class NewMatrix:
 
         return df
 
+    # Coleta os 10 melhores resultados
     def setBestCost(self):
         df = self.getCost()
         df = df.drop(columns=['start'])
@@ -97,6 +106,7 @@ class NewMatrix:
 
         return df
 
+    # Roleta, para selecionar os pais
     def dadSelector(self, df_BestCost):
         addedCosts = df_BestCost['cost'].sum(axis=0)
         cols = df_BestCost.index
@@ -113,6 +123,7 @@ class NewMatrix:
 
         return i
 
+    # Retorna os pais em um dataframe
     def dadsNewGen(self, dad_index, mom_index):
         df_BestCost = self.getBestCost()
         indexes = df_BestCost.index
@@ -130,6 +141,7 @@ class NewMatrix:
 
         return dads
 
+    # Troca algum cromossomo do pai pelo da mãe
     def changeValues(self, dads, column):
         index = list(dads.index)
         valueDad = dads[column][index[0]]
@@ -140,6 +152,7 @@ class NewMatrix:
 
         return dads, valueDad
 
+    # Verifica se o cromossomo possui dois valores iguais
     def duplicated(self, dads, valueDads, randomColumn):
         row = []
 
@@ -158,6 +171,7 @@ class NewMatrix:
 
         return row[0]
 
+    # Realiza o crossover até não terem mais cromossomos repetidos
     def crossover(self, dads):
         randomColumn = int(uniform(0, 19))
 
