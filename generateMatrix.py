@@ -102,6 +102,23 @@ class NewMatrix:
             i += 1
 
         if (i == len(df_BestCost)):
-            return cols[i - 1]
+            return i - 1
 
-        return cols[i]
+        return i
+
+    def dadsNewGen(self, dad_index, mom_index):
+        df_BestCost = self.getBestCost()
+        indexes = df_BestCost.index
+        i = 0
+
+        for ind in list(indexes):
+            df_BestCost.rename(index={ind: str(i)}, inplace=True)
+            i += 1
+
+        dad = df_BestCost.iloc[dad_index]
+        mom = df_BestCost.iloc[mom_index]
+
+        concat = pd.concat([dad, mom], axis=1)
+        dads = pd.DataFrame(concat).transpose()
+
+        return dads
