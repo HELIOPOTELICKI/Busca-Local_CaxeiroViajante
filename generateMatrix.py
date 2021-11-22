@@ -15,6 +15,8 @@ class NewMatrix:
         self.matrix = self.setMatrix(None)
         self.populationCost = pd.DataFrame(self.setCost())
         self.bestCost = self.setBestCost()
+        self.bestValue = self.getBestCost().min()
+        self.bestSolution = self.getBestCost().head(1)
 
     def getMatrix(self):
         return self.matrix.copy()
@@ -23,7 +25,7 @@ class NewMatrix:
         return self.populationCost.copy()
 
     def getBestCost(self):
-        return self.bestCost.copy()
+        return self.bestCost
 
     def getDistanceDictionary(self):
         return self.distanceDictionary.copy()
@@ -91,7 +93,9 @@ class NewMatrix:
         df = self.getCost()
         df = df.drop(columns=['start'])
         df = df.sort_values('cost')
-        return df.head(10)
+        df = df.head(10)
+
+        return df
 
     def dadSelector(self, df_BestCost):
         addedCosts = df_BestCost['cost'].sum(axis=0)
@@ -130,9 +134,6 @@ class NewMatrix:
         index = list(dads.index)
         valueDad = dads[column][index[0]]
         valueMom = dads[column][index[1]]
-
-        #if (valueDad == valueMom):
-        #   self.changeValues(dads, int(uniform(0, 19)))
 
         dads[column][index[0]] = valueMom
         dads[column][index[1]] = valueDad
